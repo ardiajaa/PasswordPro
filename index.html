@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/ibXf4pF.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        body.light-mode .bg-gray-800 {
+            background-color: white;
+            color: black;
+        }
+        body.light-mode input {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-xl font-bold mb-4 text-center">🔐 Password Generator</h2>
+
+        <div class="mb-4">
+            <input type="text" id="password" readonly class="w-full p-3 rounded bg-gray-700 text-white text-center">
+        </div>
+        
+        <button id="copyBtn" class="bg-blue-500 px-4 py-2 rounded w-full hover:bg-blue-600 transition">
+            📋 Copy Password
+        </button>
+        
+        <label class="block mt-4">Password Length:</label>
+        <input type="range" id="length" min="4" max="20" value="12" class="w-full">
+        <span id="lengthLabel" class="block text-center">12</span>
+
+        <div class="mt-4 space-y-2">
+            <label class="flex items-center">
+                <input type="checkbox" id="uppercase" checked class="mr-2"> Upper Case
+            </label>
+            <label class="flex items-center">
+                <input type="checkbox" id="numbers" checked class="mr-2"> Number
+            </label>
+            <label class="flex items-center">
+                <input type="checkbox" id="symbols" checked class="mr-2"> Symbol
+            </label>
+        </div>
+
+        <button id="generateBtn" class="mt-4 bg-green-500 px-4 py-2 rounded w-full hover:bg-green-600 transition">
+            🔄 Generate Password
+        </button>
+
+        <button id="toggleTheme" class="mt-4 bg-yellow-500 px-4 py-2 rounded w-full hover:bg-yellow-600 transition">
+            🌗 Dark/Light Mode
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const passwordField = document.getElementById("password");
+            const lengthSlider = document.getElementById("length");
+            const lengthLabel = document.getElementById("lengthLabel");
+            const uppercaseCheckbox = document.getElementById("uppercase");
+            const numbersCheckbox = document.getElementById("numbers");
+            const symbolsCheckbox = document.getElementById("symbols");
+            const generateBtn = document.getElementById("generateBtn");
+            const copyBtn = document.getElementById("copyBtn");
+            const toggleTheme = document.getElementById("toggleTheme");
+
+            const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+            const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const numberChars = "0123456789";
+            const symbolChars = "!@#$%^&*()_-+=<>?";
+
+            if (localStorage.getItem("passwordLength")) {
+                lengthSlider.value = localStorage.getItem("passwordLength");
+                lengthLabel.textContent = lengthSlider.value;
+            }
+
+            function savePreferences() {
+                localStorage.setItem("passwordLength", lengthSlider.value);
+            }
+
+            lengthSlider.addEventListener("input", () => {
+                lengthLabel.textContent = lengthSlider.value;
+                savePreferences();
+            });
+
+            function generatePassword() {
+                let charSet = lowercaseChars;
+                if (uppercaseCheckbox.checked) charSet += uppercaseChars;
+                if (numbersCheckbox.checked) charSet += numberChars;
+                if (symbolsCheckbox.checked) charSet += symbolChars;
+
+                let password = "";
+                for (let i = 0; i < lengthSlider.value; i++) {
+                    password += charSet.charAt(Math.floor(Math.random() * charSet.length));
+                }
+                passwordField.value = password;
+
+                gsap.fromTo(passwordField, { scale: 0.9 }, { scale: 1, duration: 0.3 });
+            }
+
+            generateBtn.addEventListener("click", generatePassword);
+
+            copyBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText(passwordField.value).then(() => {
+                    Swal.fire({
+                        title: "Copied!",
+                        text: "The password has been copied to the clipboard.",
+                        icon: "success",
+                        confirmButtonText: "Okay"
+                    });
+                });
+            });
+
+            toggleTheme.addEventListener("click", () => {
+                document.body.classList.toggle("light-mode");
+                localStorage.setItem(
+                    "theme",
+                    document.body.classList.contains("light-mode") ? "light" : "dark"
+                );
+            });
+
+            if (localStorage.getItem("theme") === "light") {
+                document.body.classList.add("light-mode");
+            }
+
+            generatePassword();
+        });
+    </script>
+    
+</body>
+</html>
