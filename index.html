@@ -1,559 +1,714 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PasswordPro - Generator Password Canggih & Terenkripsi</title>
-    <link rel="icon" type="image/png" href="https://icons.veryicon.com/png/o/miscellaneous/face-monochrome-icon/password-76.png">
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://icons.veryicon.com/png/o/miscellaneous/face-monochrome-icon/password-76.png"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        #particles-js {
-            position: fixed; /* Use fixed to cover the whole viewport */
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0; /* Ensure it's behind the content */
-            background-color: #111827; /* Match body background */
+      #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        background-color: #111827;
+      }
+
+      #app-container {
+        position: relative;
+        z-index: 1;
+      }
+
+      .glass-effect {
+        background: rgba(31, 41, 55, 0.8);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .password-strength {
+        height: 4px;
+        margin-top: 8px;
+        border-radius: 2px;
+        transition: width 0.3s ease, background-color 0.3s ease;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 8px;
+        background: #4b5563;
+        border-radius: 4px;
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      input[type="range"]:hover {
+        opacity: 1;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #3b82f6;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #3b82f6;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          width: 95%;
+          padding: 1rem;
         }
 
-        #app-container {
-            position: relative; /* Position relative or higher z-index */
-            z-index: 1; /* Ensure it's above the particle canvas */
+        h1 {
+          font-size: 1.5rem;
         }
 
-        .glass-effect {
-            background: rgba(31, 41, 55, 0.8);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
         }
 
-        .password-strength {
-            height: 4px;
-            margin-top: 8px;
-            border-radius: 2px;
-            transition: width 0.3s ease, background-color 0.3s ease;
+        .settings-section {
+          padding: 1rem;
         }
+      }
 
-        /* Custom range slider styles */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 8px;
-            background: #4b5563;
-            border-radius: 4px;
-            outline: none;
-            opacity: 0.7;
-            transition: opacity 0.2s;
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-
-        input[type="range"]:hover {
-            opacity: 1;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: #3b82f6;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: #3b82f6;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-            .container {
-                width: 95%;
-                padding: 1rem;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .settings-section {
-                padding: 1rem;
-            }
-        }
-
-        /* Additional animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.5s ease-out;
-        }
+      .fade-in-up {
+        animation: fadeInUp 0.5s ease-out;
+      }
     </style>
-</head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4 transition-colors duration-300 ease-in-out">
-
-    <!-- Particles.js container -->
+  </head>
+  <body
+    class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4 transition-colors duration-300 ease-in-out"
+  >
     <div id="particles-js"></div>
 
-    <div id="app-container" class="glass-effect p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 ease-in-out animate__animated animate__fadeInUp">
-        <div class="text-center mb-8 fade-in-up">
-            <h1 class="text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center text-center animate__animated animate__bounceIn">
-                <i class="fas fa-lock mr-2 sm:mr-3 text-blue-400 animate__animated animate__rubberBand"></i>
-                Generator Password
-            </h1>
-            <p class="text-gray-400 animate__animated animate__fadeIn">Buat password yang kuat dan aman</p>
-        </div>
-
-        <div class="mb-6 relative animate__animated animate__fadeInUp">
-            <input type="text" id="password" readonly
-                   class="w-full p-4 rounded-xl bg-gray-700 text-white text-center font-mono text-lg placeholder-gray-500 focus:ring-2 focus:ring-blue-500 transition-all"
-                   placeholder="Password akan muncul di sini"
-                   aria-label="Generated Password">
-            <div id="strengthMeter" class="password-strength"></div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 animate__animated animate__fadeInUp">
-            <button id="copyBtn"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl w-full transition-all flex items-center justify-center gap-2 text-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 animate__animated animate__pulse">
-                <i class="fas fa-copy"></i> Salin
-            </button>
-            <button id="generateBtn"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl w-full transition-all flex items-center justify-center gap-2 text-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 animate__animated animate__pulse">
-                <i class="fas fa-sync-alt"></i> Buat Baru
-            </button>
-        </div>
-
-        <div class="mb-6 bg-gray-700/50 p-4 rounded-xl animate__animated animate__fadeInUp">
-            <div class="flex justify-between items-center mb-3">
-                <label for="length" class="font-medium">Panjang Password:</label>
-                <span id="lengthLabel" class="font-mono bg-gray-600 px-2 py-1 rounded">12</span>
-            </div>
-            <input type="range" id="length" min="4" max="32" value="12"
-                   class="w-full h-2 bg-gray-600 rounded-full appearance-none cursor-pointer range-slider">
-        </div>
-
-        <div class="mb-6 bg-gray-700/50 p-4 rounded-xl animate__animated animate__fadeInUp">
-            <h3 class="font-medium mb-3 text-lg">Pengaturan:</h3>
-            <div class="space-y-3">
-                <label class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft">
-                    <input type="checkbox" id="uppercase" checked class="mr-3 w-5 h-5 accent-blue-500">
-                    Huruf Besar (A-Z)
-                </label>
-                <label class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft">
-                    <input type="checkbox" id="numbers" checked class="mr-3 w-5 h-5 accent-blue-500">
-                    Angka (0-9)
-                </label>
-                <label class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft">
-                    <input type="checkbox" id="symbols" checked class="mr-3 w-5 h-5 accent-blue-500">
-                    Simbol (!@#$)
-                </label>
-                 <label class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft">
-                    <input type="checkbox" id="excludeSimilar" class="mr-3 w-5 h-5 accent-blue-500">
-                    Kecualikan Karakter Mirip (l, 1, I, o, 0, O)
-                </label>
-                 <label class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft">
-                    <input type="checkbox" id="excludeAmbiguous" class="mr-3 w-5 h-5 accent-blue-500">
-                    Kecualikan Karakter Ambigu ({}[]()/\\'`"~,;:.<>)
-                </label>
-            </div>
-        </div>
-
-        <p class="text-center text-gray-500 text-sm mt-4 animate__animated animate__fadeIn">
-            © 2025 Powered by
-            <a href="https://github.com/ardiAjaa" target="_blank" class="hover:text-blue-400 transition-colors">ArdiAjaa</a>
+    <div
+      id="app-container"
+      class="glass-effect p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 ease-in-out animate__animated animate__fadeInUp"
+    >
+      <div class="text-center mb-8 fade-in-up">
+        <h1
+          class="text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center text-center animate__animated animate__bounceIn"
+        >
+          <i
+            class="fas fa-lock mr-2 sm:mr-3 text-blue-400 animate__animated animate__rubberBand"
+          ></i>
+          Generator Password
+        </h1>
+        <p class="text-gray-400 animate__animated animate__fadeIn">
+          Buat password yang kuat dan aman
         </p>
+      </div>
+
+      <div class="mb-6 relative animate__animated animate__fadeInUp">
+        <input
+          type="text"
+          id="password"
+          readonly
+          class="w-full p-4 rounded-xl bg-gray-700 text-white text-center font-mono text-lg placeholder-gray-500 focus:ring-2 focus:ring-blue-500 transition-all"
+          placeholder="Password akan muncul di sini"
+          aria-label="Generated Password"
+        />
+        <div id="strengthMeter" class="password-strength"></div>
+      </div>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 animate__animated animate__fadeInUp"
+      >
+        <button
+          id="copyBtn"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl w-full transition-all flex items-center justify-center gap-2 text-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 animate__animated animate__pulse"
+        >
+          <i class="fas fa-copy"></i> Salin
+        </button>
+        <button
+          id="generateBtn"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl w-full transition-all flex items-center justify-center gap-2 text-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 animate__animated animate__pulse"
+        >
+          <i class="fas fa-sync-alt"></i> Buat Baru
+        </button>
+      </div>
+
+      <div
+        class="mb-6 bg-gray-700/50 p-4 rounded-xl animate__animated animate__fadeInUp"
+      >
+        <div class="flex justify-between items-center mb-3">
+          <label for="length" class="font-medium">Panjang Password:</label>
+          <span id="lengthLabel" class="font-mono bg-gray-600 px-2 py-1 rounded"
+            >12</span
+          >
+        </div>
+        <input
+          type="range"
+          id="length"
+          min="4"
+          max="32"
+          value="12"
+          class="w-full h-2 bg-gray-600 rounded-full appearance-none cursor-pointer range-slider"
+        />
+      </div>
+
+      <div
+        class="mb-6 bg-gray-700/50 p-4 rounded-xl animate__animated animate__fadeInUp"
+      >
+        <h3 class="font-medium mb-3 text-lg">Pengaturan:</h3>
+        <div class="space-y-3">
+          <label
+            class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft"
+          >
+            <input
+              type="checkbox"
+              id="uppercase"
+              checked
+              class="mr-3 w-5 h-5 accent-blue-500"
+            />
+            Huruf Besar (A-Z)
+          </label>
+          <label
+            class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft"
+          >
+            <input
+              type="checkbox"
+              id="numbers"
+              checked
+              class="mr-3 w-5 h-5 accent-blue-500"
+            />
+            Angka (0-9)
+          </label>
+          <label
+            class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft"
+          >
+            <input
+              type="checkbox"
+              id="symbols"
+              checked
+              class="mr-3 w-5 h-5 accent-blue-500"
+            />
+            Simbol (!@#$)
+          </label>
+          <label
+            class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft"
+          >
+            <input
+              type="checkbox"
+              id="excludeSimilar"
+              class="mr-3 w-5 h-5 accent-blue-500"
+            />
+            Kecualikan Karakter Mirip (l, 1, I, o, 0, O)
+          </label>
+          <label
+            class="flex items-center bg-gray-600/50 p-3 rounded-lg hover:bg-gray-500/50 transition-all cursor-pointer animate__animated animate__fadeInLeft"
+          >
+            <input
+              type="checkbox"
+              id="excludeAmbiguous"
+              class="mr-3 w-5 h-5 accent-blue-500"
+            />
+            Kecualikan Karakter Ambigu ({}[]()/\\'`"~,;:.<>)
+          </label>
+        </div>
+      </div>
+
+      <p
+        class="text-center text-gray-500 text-sm mt-4 animate__animated animate__fadeIn"
+      >
+        © 2025 Powered by
+        <a
+          href="https://github.com/ardiAjaa"
+          target="_blank"
+          class="hover:text-blue-400 transition-colors"
+          >ArdiAjaa</a
+        >
+      </p>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const elements = {
-                passwordField: document.getElementById("password"),
-                lengthSlider: document.getElementById("length"),
-                lengthLabel: document.getElementById("lengthLabel"),
-                uppercaseCheckbox: document.getElementById("uppercase"),
-                numbersCheckbox: document.getElementById("numbers"),
-                symbolsCheckbox: document.getElementById("symbols"),
-                excludeSimilarCheckbox: document.getElementById("excludeSimilar"), // Added
-                excludeAmbiguousCheckbox: document.getElementById("excludeAmbiguous"), // Added
-                generateBtn: document.getElementById("generateBtn"),
-                copyBtn: document.getElementById("copyBtn"),
-                strengthMeter: document.getElementById("strengthMeter"),
-                appContainer: document.getElementById("app-container")
-            };
+      document.addEventListener("DOMContentLoaded", () => {
+        const elements = {
+          passwordField: document.getElementById("password"),
+          lengthSlider: document.getElementById("length"),
+          lengthLabel: document.getElementById("lengthLabel"),
+          uppercaseCheckbox: document.getElementById("uppercase"),
+          numbersCheckbox: document.getElementById("numbers"),
+          symbolsCheckbox: document.getElementById("symbols"),
+          excludeSimilarCheckbox: document.getElementById("excludeSimilar"),
+          excludeAmbiguousCheckbox: document.getElementById("excludeAmbiguous"),
+          generateBtn: document.getElementById("generateBtn"),
+          copyBtn: document.getElementById("copyBtn"),
+          strengthMeter: document.getElementById("strengthMeter"),
+          appContainer: document.getElementById("app-container"),
+        };
 
-            const charSets = {
-                lowercase: "abcdefghijklmnopqrstuvwxyz",
-                uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-                numbers: "0123456789",
-                symbols: "!@#$%^&*()_-+=<>?"
-            };
+        const charSets = {
+          lowercase: "abcdefghijklmnopqrstuvwxyz",
+          uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+          numbers: "0123456789",
+          symbols: "!@#$%^&*()_-+=<>?",
+        };
 
-            // Characters to exclude based on new options
-            const excludedChars = {
-                similar: "lLiIoO0",
-                ambiguous: "{}[]()/\\'`\"~,;:.<>"
-            };
+        const excludedChars = {
+          similar: "lLiIoO0",
+          ambiguous: "{}[]()/\\'`\"~,;:.<>",
+        };
 
-            // Initial animation on load
-            gsap.from(elements.appContainer, { duration: 1, y: 50, opacity: 0, ease: "power3.out" });
-
-            // Load saved preferences
-            if (localStorage.getItem("passwordLength")) {
-                elements.lengthSlider.value = localStorage.getItem("passwordLength");
-                elements.lengthLabel.textContent = elements.lengthSlider.value;
-            }
-            // Load checkbox states
-            if (localStorage.getItem("includeUppercase") !== null) elements.uppercaseCheckbox.checked = JSON.parse(localStorage.getItem("includeUppercase"));
-            if (localStorage.getItem("includeNumbers") !== null) elements.numbersCheckbox.checked = JSON.parse(localStorage.getItem("includeNumbers"));
-            if (localStorage.getItem("includeSymbols") !== null) elements.symbolsCheckbox.checked = JSON.parse(localStorage.getItem("includeSymbols"));
-            if (localStorage.getItem("excludeSimilar") !== null) elements.excludeSimilarCheckbox.checked = JSON.parse(localStorage.getItem("excludeSimilar")); // Added
-            if (localStorage.getItem("excludeAmbiguous") !== null) elements.excludeAmbiguousCheckbox.checked = JSON.parse(localStorage.getItem("excludeAmbiguous")); // Added
-
-
-            function calculatePasswordStrength(password) {
-                let strength = 0;
-                const length = password.length;
-                const hasLower = /[a-z]/.test(password);
-                const hasUpper = /[A-Z]/.test(password);
-                const hasNumber = /[0-9]/.test(password);
-                const hasSymbol = /[^A-Za-z0-9]/.test(password);
-
-                // Base strength on length
-                if (length >= 8) strength++;
-                if (length >= 12) strength++;
-                if (length >= 16) strength++; // Added another level for longer passwords
-
-                // Add strength for character types present
-                if (hasLower) strength++;
-                if (hasUpper) strength++;
-                if (hasNumber) strength++;
-                if (hasSymbol) strength++;
-
-                // Add strength for combinations
-                if ((hasLower && hasUpper) || (hasLower && hasNumber) || (hasLower && hasSymbol) ||
-                    (hasUpper && hasNumber) || (hasUpper && hasSymbol) || (hasNumber && hasSymbol)) strength++; // Any two types
-                if ((hasLower && hasUpper && hasNumber) || (hasLower && hasUpper && hasSymbol) ||
-                    (hasLower && hasNumber && hasSymbol) || (hasUpper && hasNumber && hasSymbol)) strength++; // Any three types
-                if (hasLower && hasUpper && hasNumber && hasSymbol) strength++; // All four types
-
-                // Cap strength at a reasonable level (e.g., 5 or 6 for better granularity)
-                return Math.min(strength, 6); // Increased max strength levels for better granularity
-            }
-
-            function updateStrengthMeter(password) {
-                const strength = calculatePasswordStrength(password);
-                // Colors: Red (Very Weak), Orange (Weak), Yellow (Moderate), Light Green (Good), Green (Strong), Dark Green (Very Strong)
-                const colors = ['#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#16a34a'];
-                const maxStrengthLevels = 6; // Corresponds to the max return value of calculatePasswordStrength
-                const widthPercentage = (strength / maxStrengthLevels) * 100; // Scale width based on max levels
-
-                gsap.to(elements.strengthMeter, {
-                    duration: 0.3,
-                    width: `${widthPercentage}%`,
-                    backgroundColor: colors[strength],
-                    ease: "power2.out"
-                });
-            }
-
-            function generatePassword() {
-                let currentChars = "";
-                const includeUppercase = elements.uppercaseCheckbox.checked;
-                const includeNumbers = elements.numbersCheckbox.checked;
-                const includeSymbols = elements.symbolsCheckbox.checked;
-                const excludeSimilar = elements.excludeSimilarCheckbox.checked; // Added
-                const excludeAmbiguous = elements.excludeAmbiguousCheckbox.checked; // Added
-
-                // Always include lowercase by default
-                currentChars += charSets.lowercase;
-                if (includeUppercase) currentChars += charSets.uppercase;
-                if (includeNumbers) currentChars += charSets.numbers;
-                if (includeSymbols) currentChars += charSets.symbols;
-
-                // Apply exclusions
-                if (excludeSimilar) {
-                    currentChars = currentChars.split('').filter(char => !excludedChars.similar.includes(char)).join('');
-                }
-                 if (excludeAmbiguous) {
-                    currentChars = currentChars.split('').filter(char => !excludedChars.ambiguous.includes(char)).join('');
-                }
-
-
-                // Check if *any* character type is selected (lowercase is always included unless filtered out)
-                 if (currentChars.length === 0) {
-                     Swal.fire({
-                        title: "Peringatan!",
-                        text: "Tidak ada karakter yang tersedia dengan pengaturan yang dipilih. Harap sesuaikan pengaturan.",
-                        icon: "warning",
-                        confirmButtonText: "Oke",
-                        customClass: {
-                            popup: 'bg-gray-800 text-white',
-                            confirmButton: 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }
-                    });
-                    elements.passwordField.value = ""; // Clear password field
-                    updateStrengthMeter(""); // Reset strength meter
-                    return; // Stop generation
-                }
-
-
-                let password = "";
-                const passwordLength = parseInt(elements.lengthSlider.value, 10);
-
-                // Ensure at least one character from each *checked* category is included,
-                // respecting exclusions.
-                let requiredChars = [];
-                const addRequiredChar = (set, excludeSet) => {
-                    const availableSet = set.split('').filter(char => !excludeSet.includes(char)).join('');
-                    if (availableSet.length > 0) {
-                         requiredChars.push(availableSet.charAt(Math.floor(Math.random() * availableSet.length)));
-                    }
-                };
-
-                // Always attempt to add lowercase (if available after exclusions)
-                addRequiredChar(charSets.lowercase, (excludeSimilar ? excludedChars.similar : "") + (excludeAmbiguous ? excludedChars.ambiguous : ""));
-
-                if (includeUppercase) addRequiredChar(charSets.uppercase, (excludeSimilar ? excludedChars.similar : "") + (excludeAmbiguous ? excludedChars.ambiguous : ""));
-                if (includeNumbers) addRequiredChar(charSets.numbers, (excludeSimilar ? excludedChars.similar : "") + (excludeAmbiguous ? excludedChars.ambiguous : ""));
-                if (includeSymbols) addRequiredChar(charSets.symbols, (excludeSimilar ? excludedChars.similar : "") + (excludeAmbiguous ? excludedChars.ambiguous : ""));
-
-                 // If requiredChars is longer than passwordLength (unlikely but possible with very short lengths),
-                 // truncate it.
-                 requiredChars = requiredChars.slice(0, passwordLength);
-
-
-                // Add required characters first
-                password = requiredChars.join('');
-
-                // Fill the rest of the password length with random characters from the combined set
-                for (let i = password.length; i < passwordLength; i++) {
-                    password += currentChars.charAt(Math.floor(Math.random() * currentChars.length));
-                }
-
-                // Shuffle the password to ensure randomness
-                password = password.split('').sort(() => Math.random() - 0.5).join('');
-
-
-                elements.passwordField.value = password;
-                updateStrengthMeter(password);
-
-                // Animation for password field update
-                gsap.fromTo(elements.passwordField,
-                    { scale: 0.98, opacity: 0.7 },
-                    { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" });
-            }
-
-            function savePreferences() {
-                localStorage.setItem("passwordLength", elements.lengthSlider.value);
-                localStorage.setItem("includeUppercase", elements.uppercaseCheckbox.checked);
-                localStorage.setItem("includeNumbers", elements.numbersCheckbox.checked);
-                localStorage.setItem("includeSymbols", elements.symbolsCheckbox.checked);
-                localStorage.setItem("excludeSimilar", elements.excludeSimilarCheckbox.checked); // Added
-                localStorage.setItem("excludeAmbiguous", elements.excludeAmbiguousCheckbox.checked); // Added
-            }
-
-            // Event Listeners
-            elements.lengthSlider.addEventListener("input", () => {
-                elements.lengthLabel.textContent = elements.lengthSlider.value;
-                savePreferences();
-                // Optional: Regenerate password automatically when length changes
-                // generatePassword(); // Decided not to auto-regenerate on length change for better user control
-            });
-
-             // Regenerate password and save preferences when any checkbox changes
-            elements.uppercaseCheckbox.addEventListener("change", () => { generatePassword(); savePreferences(); });
-            elements.numbersCheckbox.addEventListener("change", () => { generatePassword(); savePreferences(); });
-            elements.symbolsCheckbox.addEventListener("change", () => { generatePassword(); savePreferences(); });
-            elements.excludeSimilarCheckbox.addEventListener("change", () => { generatePassword(); savePreferences(); }); // Added
-            elements.excludeAmbiguousCheckbox.addEventListener("change", () => { generatePassword(); savePreferences(); }); // Added
-
-
-            elements.generateBtn.addEventListener("click", generatePassword);
-
-            elements.copyBtn.addEventListener("click", () => {
-                const password = elements.passwordField.value;
-                if (!password) {
-                     Swal.fire({
-                        title: "Info",
-                        text: "Tidak ada password untuk disalin.",
-                        icon: "info",
-                        confirmButtonText: "Oke",
-                         customClass: {
-                            popup: 'bg-gray-800 text-white',
-                            confirmButton: 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }
-                    });
-                    return;
-                }
-
-                navigator.clipboard.writeText(password).then(() => {
-                    Swal.fire({
-                        title: "Tersalin!",
-                        text: "Password telah disalin ke clipboard.",
-                        icon: "success",
-                        confirmButtonText: "Oke",
-                        customClass: {
-                            popup: 'bg-gray-800 text-white',
-                            confirmButton: 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }
-                    });
-                     // Optional: Add a visual feedback animation on the copy button
-                     gsap.fromTo(elements.copyBtn,
-                        { scale: 1.05 },
-                        { scale: 1, duration: 0.3, ease: "elastic.out(1, 0.5)" });
-
-                }).catch(err => {
-                     Swal.fire({
-                        title: "Gagal Salin!",
-                        text: "Gagal menyalin password: " + err,
-                        icon: "error",
-                        confirmButtonText: "Oke",
-                         customClass: {
-                            popup: 'bg-gray-800 text-white',
-                            confirmButton: 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }
-                    });
-                });
-            });
-
-            // Generate initial password on load
-            generatePassword();
+        gsap.from(elements.appContainer, {
+          duration: 1,
+          y: 50,
+          opacity: 0,
+          ease: "power3.out",
         });
+
+        if (localStorage.getItem("passwordLength")) {
+          elements.lengthSlider.value = localStorage.getItem("passwordLength");
+          elements.lengthLabel.textContent = elements.lengthSlider.value;
+        }
+        if (localStorage.getItem("includeUppercase") !== null)
+          elements.uppercaseCheckbox.checked = JSON.parse(
+            localStorage.getItem("includeUppercase")
+          );
+        if (localStorage.getItem("includeNumbers") !== null)
+          elements.numbersCheckbox.checked = JSON.parse(
+            localStorage.getItem("includeNumbers")
+          );
+        if (localStorage.getItem("includeSymbols") !== null)
+          elements.symbolsCheckbox.checked = JSON.parse(
+            localStorage.getItem("includeSymbols")
+          );
+        if (localStorage.getItem("excludeSimilar") !== null)
+          elements.excludeSimilarCheckbox.checked = JSON.parse(
+            localStorage.getItem("excludeSimilar")
+          );
+        if (localStorage.getItem("excludeAmbiguous") !== null)
+          elements.excludeAmbiguousCheckbox.checked = JSON.parse(
+            localStorage.getItem("excludeAmbiguous")
+          );
+
+        function calculatePasswordStrength(password) {
+          let strength = 0;
+          const length = password.length;
+          const hasLower = /[a-z]/.test(password);
+          const hasUpper = /[A-Z]/.test(password);
+          const hasNumber = /[0-9]/.test(password);
+          const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
+          if (length >= 8) strength++;
+          if (length >= 12) strength++;
+          if (length >= 16) strength++;
+
+          if (hasLower) strength++;
+          if (hasUpper) strength++;
+          if (hasNumber) strength++;
+          if (hasSymbol) strength++;
+
+          if (
+            (hasLower && hasUpper) ||
+            (hasLower && hasNumber) ||
+            (hasLower && hasSymbol) ||
+            (hasUpper && hasNumber) ||
+            (hasUpper && hasSymbol) ||
+            (hasNumber && hasSymbol)
+          )
+            strength++;
+          if (
+            (hasLower && hasUpper && hasNumber) ||
+            (hasLower && hasUpper && hasSymbol) ||
+            (hasLower && hasNumber && hasSymbol) ||
+            (hasUpper && hasNumber && hasSymbol)
+          )
+            strength++;
+          if (hasLower && hasUpper && hasNumber && hasSymbol) strength++;
+
+          return Math.min(strength, 6);
+        }
+
+        function updateStrengthMeter(password) {
+          const strength = calculatePasswordStrength(password);
+          const colors = [
+            "#ef4444",
+            "#f97316",
+            "#eab308",
+            "#84cc16",
+            "#22c55e",
+            "#16a34a",
+          ];
+          const maxStrengthLevels = 6;
+          const widthPercentage = (strength / maxStrengthLevels) * 100;
+
+          gsap.to(elements.strengthMeter, {
+            duration: 0.3,
+            width: `${widthPercentage}%`,
+            backgroundColor: colors[strength],
+            ease: "power2.out",
+          });
+        }
+
+        function generatePassword() {
+          let currentChars = "";
+          const includeUppercase = elements.uppercaseCheckbox.checked;
+          const includeNumbers = elements.numbersCheckbox.checked;
+          const includeSymbols = elements.symbolsCheckbox.checked;
+          const excludeSimilar = elements.excludeSimilarCheckbox.checked;
+          const excludeAmbiguous = elements.excludeAmbiguousCheckbox.checked;
+
+          currentChars += charSets.lowercase;
+          if (includeUppercase) currentChars += charSets.uppercase;
+          if (includeNumbers) currentChars += charSets.numbers;
+          if (includeSymbols) currentChars += charSets.symbols;
+
+          if (excludeSimilar) {
+            currentChars = currentChars
+              .split("")
+              .filter((char) => !excludedChars.similar.includes(char))
+              .join("");
+          }
+          if (excludeAmbiguous) {
+            currentChars = currentChars
+              .split("")
+              .filter((char) => !excludedChars.ambiguous.includes(char))
+              .join("");
+          }
+
+          if (currentChars.length === 0) {
+            Swal.fire({
+              title: "Peringatan!",
+              text: "Tidak ada karakter yang tersedia dengan pengaturan yang dipilih. Harap sesuaikan pengaturan.",
+              icon: "warning",
+              confirmButtonText: "Oke",
+              customClass: {
+                popup: "bg-gray-800 text-white",
+                confirmButton: "bg-blue-500 hover:bg-blue-600 text-white",
+              },
+            });
+            elements.passwordField.value = "";
+            updateStrengthMeter("");
+            return;
+          }
+
+          let password = "";
+          const passwordLength = parseInt(elements.lengthSlider.value, 10);
+
+          let requiredChars = [];
+          const addRequiredChar = (set, excludeSet) => {
+            const availableSet = set
+              .split("")
+              .filter((char) => !excludeSet.includes(char))
+              .join("");
+            if (availableSet.length > 0) {
+              requiredChars.push(
+                availableSet.charAt(
+                  Math.floor(Math.random() * availableSet.length)
+                )
+              );
+            }
+          };
+
+          addRequiredChar(
+            charSets.lowercase,
+            (excludeSimilar ? excludedChars.similar : "") +
+              (excludeAmbiguous ? excludedChars.ambiguous : "")
+          );
+
+          if (includeUppercase)
+            addRequiredChar(
+              charSets.uppercase,
+              (excludeSimilar ? excludedChars.similar : "") +
+                (excludeAmbiguous ? excludedChars.ambiguous : "")
+            );
+          if (includeNumbers)
+            addRequiredChar(
+              charSets.numbers,
+              (excludeSimilar ? excludedChars.similar : "") +
+                (excludeAmbiguous ? excludedChars.ambiguous : "")
+            );
+          if (includeSymbols)
+            addRequiredChar(
+              charSets.symbols,
+              (excludeSimilar ? excludedChars.similar : "") +
+                (excludeAmbiguous ? excludedChars.ambiguous : "")
+            );
+
+          requiredChars = requiredChars.slice(0, passwordLength);
+
+          password = requiredChars.join("");
+
+          for (let i = password.length; i < passwordLength; i++) {
+            password += currentChars.charAt(
+              Math.floor(Math.random() * currentChars.length)
+            );
+          }
+
+          password = password
+            .split("")
+            .sort(() => Math.random() - 0.5)
+            .join("");
+
+          elements.passwordField.value = password;
+          updateStrengthMeter(password);
+
+          gsap.fromTo(
+            elements.passwordField,
+            { scale: 0.98, opacity: 0.7 },
+            { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+          );
+        }
+
+        function savePreferences() {
+          localStorage.setItem("passwordLength", elements.lengthSlider.value);
+          localStorage.setItem(
+            "includeUppercase",
+            elements.uppercaseCheckbox.checked
+          );
+          localStorage.setItem(
+            "includeNumbers",
+            elements.numbersCheckbox.checked
+          );
+          localStorage.setItem(
+            "includeSymbols",
+            elements.symbolsCheckbox.checked
+          );
+          localStorage.setItem(
+            "excludeSimilar",
+            elements.excludeSimilarCheckbox.checked
+          );
+          localStorage.setItem(
+            "excludeAmbiguous",
+            elements.excludeAmbiguousCheckbox.checked
+          );
+        }
+
+        elements.lengthSlider.addEventListener("input", () => {
+          elements.lengthLabel.textContent = elements.lengthSlider.value;
+          savePreferences();
+        });
+
+        elements.uppercaseCheckbox.addEventListener("change", () => {
+          generatePassword();
+          savePreferences();
+        });
+        elements.numbersCheckbox.addEventListener("change", () => {
+          generatePassword();
+          savePreferences();
+        });
+        elements.symbolsCheckbox.addEventListener("change", () => {
+          generatePassword();
+          savePreferences();
+        });
+        elements.excludeSimilarCheckbox.addEventListener("change", () => {
+          generatePassword();
+          savePreferences();
+        });
+        elements.excludeAmbiguousCheckbox.addEventListener("change", () => {
+          generatePassword();
+          savePreferences();
+        });
+
+        elements.generateBtn.addEventListener("click", generatePassword);
+
+        elements.copyBtn.addEventListener("click", () => {
+          const password = elements.passwordField.value;
+          if (!password) {
+            Swal.fire({
+              title: "Info",
+              text: "Tidak ada password untuk disalin.",
+              icon: "info",
+              confirmButtonText: "Oke",
+              customClass: {
+                popup: "bg-gray-800 text-white",
+                confirmButton: "bg-blue-500 hover:bg-blue-600 text-white",
+              },
+            });
+            return;
+          }
+
+          navigator.clipboard
+            .writeText(password)
+            .then(() => {
+              Swal.fire({
+                title: "Tersalin!",
+                text: "Password telah disalin ke clipboard.",
+                icon: "success",
+                confirmButtonText: "Oke",
+                customClass: {
+                  popup: "bg-gray-800 text-white",
+                  confirmButton: "bg-blue-500 hover:bg-blue-600 text-white",
+                },
+              });
+              gsap.fromTo(
+                elements.copyBtn,
+                { scale: 1.05 },
+                { scale: 1, duration: 0.3, ease: "elastic.out(1, 0.5)" }
+              );
+            })
+            .catch((err) => {
+              Swal.fire({
+                title: "Gagal Salin!",
+                text: "Gagal menyalin password: " + err,
+                icon: "error",
+                confirmButtonText: "Oke",
+                customClass: {
+                  popup: "bg-gray-800 text-white",
+                  confirmButton: "bg-blue-500 hover:bg-blue-600 text-white",
+                },
+              });
+            });
+        });
+
+        generatePassword();
+      });
     </script>
 
-    <!-- Particles.js initialization script -->
     <script>
-        particlesJS('particles-js', {
-            "particles": {
-                "number": {
-                    "value": 80, /* Number of particles */
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#ffffff" /* Particle color (white) */
-                },
-                "shape": {
-                    "type": "circle", /* Particle shape */
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    }
-                },
-                "opacity": {
-                    "value": 0.5, /* Particle opacity */
-                    "random": false,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3, /* Particle size */
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true, /* Enable lines between particles */
-                    "distance": 150, /* Max distance for lines */
-                    "color": "#ffffff", /* Line color */
-                    "opacity": 0.4,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true, /* Enable particle movement */
-                    "speed": 6, /* Movement speed */
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
+      particlesJS("particles-js", {
+        particles: {
+          number: {
+            value: 80,
+            density: {
+              enable: true,
+              value_area: 800,
             },
-            "interactivity": {
-                "detect_on": "canvas", /* Detect interaction on the canvas */
-                "events": {
-                    "onhover": {
-                        "enable": true, /* Enable hover interaction */
-                        "mode": "repulse" /* Mode: repulse (push away) */
-                    },
-                    "onclick": {
-                        "enable": true, /* Enable click interaction */
-                        "mode": "repulse" /* Mode: repulse (push away) */
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 100, /* Distance for repulse effect */
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
+          },
+          color: {
+            value: "#ffffff",
+          },
+          shape: {
+            type: "circle",
+            stroke: {
+              width: 0,
+              color: "#000000",
             },
-            "retina_detect": true
-        });
+            polygon: {
+              nb_sides: 5,
+            },
+          },
+          opacity: {
+            value: 0.5,
+            random: false,
+            anim: {
+              enable: false,
+              speed: 1,
+              opacity_min: 0.1,
+              sync: false,
+            },
+          },
+          size: {
+            value: 3,
+            random: true,
+            anim: {
+              enable: false,
+              speed: 40,
+              size_min: 0.1,
+              sync: false,
+            },
+          },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1,
+          },
+          move: {
+            enable: true,
+            speed: 6,
+            direction: "none",
+            random: false,
+            straight: false,
+            out_mode: "out",
+            bounce: false,
+            attract: {
+              enable: false,
+              rotateX: 600,
+              rotateY: 1200,
+            },
+          },
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: {
+              enable: true,
+              mode: "repulse",
+            },
+            onclick: {
+              enable: true,
+              mode: "repulse",
+            },
+            resize: true,
+          },
+          modes: {
+            grab: {
+              distance: 400,
+              line_linked: {
+                opacity: 1,
+              },
+            },
+            bubble: {
+              distance: 400,
+              size: 40,
+              duration: 2,
+              opacity: 8,
+              speed: 3,
+            },
+            repulse: {
+              distance: 100,
+              duration: 0.4,
+            },
+            push: {
+              particles_nb: 4,
+            },
+            remove: {
+              particles_nb: 2,
+            },
+          },
+        },
+        retina_detect: true,
+      });
     </script>
-
-</body>
+  </body>
 </html>
