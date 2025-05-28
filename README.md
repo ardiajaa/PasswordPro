@@ -1,6 +1,6 @@
 # PasswordPro - Generator Password Canggih & Terenkripsi
 
-![PasswordPro Screenshot](https://icons.veryicon.com/png/o/miscellaneous/face-monochrome-icon/password-76.png)
+![PasswordPro Screenshot](https://github.com/ardiajaa/password-generator/blob/main/preview.png)
 
 PasswordPro adalah generator password online yang aman dan canggih untuk membantu Anda membuat password yang kuat dan sulit ditebak. Dibangun dengan teknologi modern dan antarmuka yang user-friendly.
 
@@ -36,7 +36,7 @@ PasswordPro adalah generator password online yang aman dan canggih untuk membant
 
 ## Demo
 
-Coba langsung di: [https://password-generator-orpin-two.vercel.app](https://password-generator-orpin-two.vercel.app)
+Coba langsung di: [https://password-pro-by-ardi.vercel.app](https://password-pro-by-ardi.vercel.app)
 
 ## Kontribusi
 
